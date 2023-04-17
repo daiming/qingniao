@@ -3,56 +3,30 @@ import { fa } from "element-plus/es/locale";
 import IconItem from "./IconItem.vue";
 import Profile from "./Profile.vue";
 import ChatForm from "./ChatForm.vue";
-import { computed, ref } from "vue";
+import { onMounted, ref } from "vue";
+import { invoke } from "@tauri-apps/api/tauri";
 
 // 用户列表
 interface User {
     ipaddr: string,
     nickname: string,
     avatar?: string,
-    msgCount?: number,
-    isChecked?: boolean
+    msg_count?: number,
+    is_checked?: boolean
 }
 
 const userList = ref<User[]>([
-    {
-        ipaddr: "192.168.12.1",
-        nickname: "192.168.12.1",
-        avatar: "avatar01",
-        msgCount: 0
-    },
-    {
-        ipaddr: "192.168.12.2",
-        nickname: "192.168.12.2",
-        avatar: "avatar12",
-        msgCount: 2
-    },
-    {
-        ipaddr: "192.168.12.3",
-        nickname: "192.168.12.3",
-        avatar: "avatar11",
-        msgCount: 5
-    },
-    {
-        ipaddr: "192.168.12.4",
-        nickname: "192.168.12.4",
-        avatar: "avatar04",
-        msgCount: 0
-    },
-    {
-        ipaddr: "192.168.12.5",
-        nickname: "192.168.12.5",
-        avatar: "avatar05",
-        msgCount: 0
-    },
-
 ]);
+
+onMounted(() => {
+    getUserList();
+});
 
 const currentUser = ref<User>({
     ipaddr: "",
     nickname: "",
     avatar: "",
-    msgCount: 0
+    msg_count: 0
 });
 
 // 处理点击，设置点击效果
@@ -60,12 +34,20 @@ function handleItemClicked(ipaddr: string) {
     userList.value.map(function (user) {
         if(user.ipaddr === ipaddr){
             currentUser.value = user;
-            user.isChecked  = true;
+            user.is_checked  = true;
         }else{
-            user.isChecked = false;
+            user.is_checked = false;
         }
     });
 }
+
+async function getUserList() {
+  // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+  userList.value = await invoke("get_user_list");
+  console.log("接收到的参数：",userList.value);
+}
+
+
 
 </script>
 <template>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import MsgForm from "./MsgForm.vue";
 import InputForm from "./InputForm.vue";
-import { computed, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { Message } from "../interfaces/ObjectDefines";
+import { invoke } from "@tauri-apps/api/tauri";
 
 const props = defineProps({
     nickname: {
@@ -13,37 +14,27 @@ const props = defineProps({
 
 
 const msgList = ref<Message[]>([
-    {
-        message: "在某些情况下，需要立即封存患者相关的所有未归档病案，封存文件为锁定状态，无法解锁，无法编辑修改。",
-        nickname: "黑山老妖",
-        avatar: "avatar01",
-        msgTime: "2022-03-01 12:22:34",
-        isSelf: false
-    },
-    {
-        message: "病案封存通过系统赋予某种角色权限完成。",
-        nickname: "黑山老妖",
-        avatar: "avatar02",
-        msgTime: "2022-03-01 12:22:34",
-        isSelf: false
-    },
-    {
-        message: "2.文件封存时能实时采集各业务系统中与该患者相关的当前有效数据，生成病案文档，并保存，产生独立的文档版本编号。",
-        nickname: "钢铁侠",
-        avatar: "avatar11",
-        msgTime: "2022-03-01 12:22:34",
-        isSelf: true
-    },
-    {
-        message: "好。",
-        nickname: "蜘蛛侠",
-        avatar: "avatar13",
-        msgTime: "2022-03-01 12:22:34",
-        isSelf: false
-    },
-
-
 ]);
+
+onMounted(() => {
+    getMessageList();
+});
+
+
+async function getMessageList() {
+  // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+  msgList.value = await invoke("get_user_message",{mac:"0000000000"});
+  if(msgList.value.length > 0) {
+    msgList.value.map(msg => {
+        if(msg.is_self) {
+            msg.nickname = "自己";
+        }else{
+            msg.nickname = props.nickname;
+        }
+    }  );
+
+  }
+}
 
 </script>
 

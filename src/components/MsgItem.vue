@@ -9,12 +9,12 @@ const props = defineProps({
         required: true
     },
     // 是否为自己的消息
-    isSelf: {
+    is_self: {
         type: Boolean,
         default: false
     },
     // 消息发送的时间
-    msgTime: {
+    msg_time: {
         type: String,
         required: true
     },
@@ -36,10 +36,10 @@ const textStyle = computed(() => {
 </script>
 <template>
     <el-row>
-        <el-col v-if="isSelf" :span="24" class="msg-item" style="justify-content: end;" >
+        <el-col v-if="is_self" :span="24" class="msg-item" style="justify-content: end;" >
             <div class="msg-content" style="margin-left: 0;margin-right: 10px;align-items: end;">
                 <div class="msg-info" style="align-items: end;">
-                    <span class="msg-time" style="margin-left: 0; ">{{ msgTime }}</span>
+                    <span class="msg-time" style="margin-left: 0; ">{{ msg_time }}</span>
                     <span class="msg-name" style="margin-left: 10px; margin-right: 0;">{{ nickname }}</span>
                 </div>
                 <div class="msg-text" style="background-color: palegreen;">
@@ -53,7 +53,7 @@ const textStyle = computed(() => {
             <div class="msg-content">
                 <div class="msg-info">
                     <span class="msg-name">{{ nickname }}</span>
-                    <span class="msg-time">{{ msgTime }}</span>
+                    <span class="msg-time">{{ msg_time }}</span>
                 </div>
                 <div class="msg-text">
                     {{ message }}

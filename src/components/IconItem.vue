@@ -12,12 +12,12 @@ const props = defineProps({
         required: true
     },
     // 是否为选中状态
-    isChecked: {
+    is_checked: {
         type: Boolean,
         default: false
     },
     // 未读消息的数量
-    msgCount: {
+    msg_count: {
         type: Number,
         default: 0
     },
@@ -37,11 +37,11 @@ console.log('传入的参数：', props);
 
 // 设置被选中的样式
 const itemStyle = computed(() => {
-    return props.isChecked ? "item-style item-style-checked" : "item-style";
+    return props.is_checked ? "item-style item-style-checked" : "item-style";
 });
 // 计算是否要显示用户消息徽章
 const isShowBadge = computed(() => {
-    return props.msgCount > 0 ? false : true;
+    return props.msg_count > 0 ? false : true;
 });
 // 设置用户头像地址
 const avatarUrl = computed(() => {
@@ -58,7 +58,7 @@ function handleChecked() {
 <template>
     <div :class="itemStyle" @click="handleChecked">
         <div class="icon-box">
-            <el-badge :value="props.msgCount" :hidden="isShowBadge" class="badge-img">
+            <el-badge :value="props.msg_count" :hidden="isShowBadge" class="badge-img">
                 <img class="icon-img" :src="avatarUrl" />
             </el-badge>
         </div>
